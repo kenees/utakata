@@ -1,8 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
-import Authority from '@/pages/authority';
-import history from '@/router/history';
+import {HashRouter as Router, Route, Switch} from 'react-router-dom';
+// import Authority from '@/pages/authority';
 import stores from '@/store';
 import route from '@/router';
 
@@ -10,7 +9,7 @@ import route from '@/router';
 function App(props: any) {
   return (
     <Provider store={stores}>
-      <Authority>
+      {/* <Authority> */}
         <Router>
           <Switch>
                 {
@@ -24,7 +23,7 @@ function App(props: any) {
                 }
           </Switch>
         </Router>
-      </Authority>
+      {/* </Authority> */}
     </Provider>
   )
 }

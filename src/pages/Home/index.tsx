@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Button } from 'antd';
+// import Layout from '@/components/Layout';
+import { MyLayout } from '@/components';
 import styles from './index.module.scss';
 
 @connect(({ user }) => ({ user }))
@@ -15,7 +17,7 @@ export default class Home extends React.Component<{}, {}> {
   render() {
     return (
       <div className={styles.page}>
-        <Button>sdfskjk</Button>
+        <MyLayout />
       </div>
     )
   }

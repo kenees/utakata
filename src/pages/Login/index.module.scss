@@ -1,0 +1,19 @@
+.login_layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: auto;
+  background: #f0f2f5;
+
+  .header {
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 100px;
+  }
+
+  .form {
+    width: 300px;
+    margin: 40px auto;
+  }
+}

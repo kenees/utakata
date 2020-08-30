@@ -1,4 +1,5 @@
 import Home from '@/pages/Home';
+import Login from '@/pages/Login';
 
 interface IRouter {
     path: string,
@@ -14,7 +15,14 @@ const Router: IRouter[] = [
         exact: true,
         component: Home,
         requiresAuth: false,
+    },
+    {
+        path: '/login',
+        exact: true,
+        component: Login,
+        requiresAuth: false,
     }
+
 ];
 
 export default Router;

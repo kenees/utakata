@@ -3,7 +3,7 @@ const path = require('path');
 
 module.exports = {
 	entry: {
-		vendors: ['react', 'antd', 'react-dom', 'redux']
+		vendors: ['react', 'antd']
 	},
 	
 	output: {
