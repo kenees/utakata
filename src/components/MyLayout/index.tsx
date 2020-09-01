@@ -1,12 +1,10 @@
 import React from 'react';
-import { Layout, Menu } from 'antd';
+import { Layout } from 'antd';
 import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
-  UploadOutlined,
 } from '@ant-design/icons';
+import Menu from './Menu';
 
 import styles from './index.module.scss';
 
@@ -25,25 +23,16 @@ export default class MyLayout extends React.Component {
 
 
   render() {
+    const { collapsed } = this.state;
     return (
     <Layout >
-      <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
+      <Sider className={styles.sider} trigger={null} collapsible collapsed={collapsed}>
         <div className={styles.logo} />
-        <Menu theme='dark' mode='inline' defaultSelectedkeys={['1']}>
-          <Menu.Item key='1' icon={<UserOutlined />}>
-            nav 1
-          </Menu.Item>
-          <Menu.Item key='2' icon={<VideoCameraOutlined />}>
-            nav 2
-          </Menu.Item>
-          <Menu.Item key='3' icon={<UploadOutlined />}>
-            nav 3
-          </Menu.Item>
-        </Menu>
+        <Menu />
       </Sider>
-      <Layout className={styles['site-layout']}>
-          <Header className={styles['site-layout-background']} style={{ padding: 0}}>
-          {React.createElement(this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
+      <Layout className={styles['site-layout']} style={{paddingLeft: collapsed ? '81px' : '203px'}}>
+          <Header className={styles['site-layout-header']} style={{ left: collapsed ? '81px' : '203px', padding: 0}}>
+          {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
               className: styles.trigger,
               onClick: this.toggle,
             })}
@@ -52,7 +41,6 @@ export default class MyLayout extends React.Component {
             className={styles['layout-content']}
             style={{
               margin: '24px 16px',
-              padding: 24,
             }}
           >
 ssss

@@ -16,11 +16,29 @@
   margin: 16px;
 }
 
+.sider {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100%;
+}
+
+.site-layout {
+  min-height: 100vh;
+}
+
+.site-layout-header {
+  background: #fff;
+  position: fixed;
+  left: 203px;
+  right: 0;
+}
+
+
 .site-layout .site-layout-background {
   background: #fff;
   
 }
 .layout-content {
-  height: 100vh;
-
+  padding-top: 42px;
 }
