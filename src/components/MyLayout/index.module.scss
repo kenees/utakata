@@ -32,6 +32,20 @@
   position: fixed;
   left: 203px;
   right: 0;
+  z-index: 9;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .headerContent {
+    margin-right: 20px;
+    display: flex;
+    align-items: center;
+
+    .user, .avatar {
+      margin-left: 20px;
+    }
+  }
 }
 
 
@@ -40,5 +54,7 @@
   
 }
 .layout-content {
-  padding-top: 42px;
+  padding-top: 72px;
+  margin: 0 16px;
+  box-sizing: border-box;
 }

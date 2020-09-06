@@ -1,27 +1,65 @@
 import React from 'react';
+import {Link } from 'react-router-dom';
 import { Menu } from 'antd';
-import Icon, {
+import {
   UserOutlined,
   VideoCameraOutlined,
   UploadOutlined,
 } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
+import history from '@/router/history'
 import router from '@/router';
 
+const { Item } = Menu;
 
-export default class MyMenu extends React.Component<{}, {}> {
+interface IProps {
+
+}
+
+interface IState {
+  selectedKeys: string[],
+}
+
+export default class MyMenu extends React.Component<IProps, IState> {
+
+  constructor(props: IProps) {
+    super(props);
+    this.state = {
+      selectedKeys: [],
+    }
+  }
+
+  componentDidMount() {
+    this.setState({
+      selectedKeys: [history.location.hash.substr(1)]
+    })
+    history.listen((history:any) =>{
+      this.setState({
+        selectedKeys: [history.location.hash.substr(1)]
+      })
+    })
+  }
+
   render() {
-    return <Menu theme='dark' mode='inline' defaultSelectedkeys={[1]}>
+    const { selectedKeys } = this.state;
+    console.log('selectedKeys', selectedKeys);
+    return <Menu
+              theme='dark'
+              mode='inline'
+              selectedKeys={selectedKeys}
+    >
       {
         router.map((item, idx) => {
-          if (item.menu) {
-            return <Menu.Item key={item.path}
-              icon={<UserOutlined />}
+          if (typeof item.menu !== 'boolean') {
+            return <Item key={item.path}
+                              icon={React.createElement(item.menu.icon)}
             >
-              <Link to={item.path}>
-                {item.menu.title}
+              <Link to={{
+                pathname: item.path,
+                }}
+              >
+                { item.menu.title }
               </Link>
-            </Menu.Item>
+            </Item>
           }
         })
       }

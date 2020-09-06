@@ -7,20 +7,18 @@ import { IProps, IState } from './interface';
 import styles from './index.module.scss';
 
 @connect(({ user }) => ({ user }))
-export default class Home extends React.Component<IProps, IState> {
+export default class Message extends React.Component<{}, {}> {
 
   constructor(props: IProps) {
     super(props);
     this.state = {
-
     };
   }
 
   render() {
     return (
       <div className={styles.page}>
-        Home
-       
+          message
       </div>
     )
   }

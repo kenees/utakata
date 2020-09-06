@@ -111,10 +111,10 @@ module.exports = {
     //  单独导出css
     new ExtractTextPlugin('./static/css/styles.css'),
     // 告诉webpack使用那些动态链接库
-    new webpack.DllReferencePlugin({
-      context: __dirname,
-      manifest: require('../build/vendors.manifest.json')
-    })
+    // new webpack.DllReferencePlugin({
+    //   context: __dirname,
+    //   manifest: require('../build/vendors.manifest.json')
+    // })
   ],
   
 };

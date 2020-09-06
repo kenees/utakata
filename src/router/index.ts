@@ -1,10 +1,17 @@
 import Home from '@/pages/Home';
 import Login from '@/pages/Login';
+import User from '@/pages/User';
+import Article from '@/pages/Article';
+import Message from '@/pages/Message';
+import Music from '@/pages/Music';
+import Tags from '@/pages/Tags';
+import Forbidden from '@/components/Forbidden';
+import NotFound from '@/components/NotFound';
+import ServerError from '@/components/ServerError';
 
 import {
     UserOutlined,
     VideoCameraOutlined,
-    UploadOutlined,
     TagOutlined,
     MessageOutlined,
     HomeOutlined,
@@ -23,14 +30,65 @@ interface IRouter {
 }
 
 const Router: IRouter[] = [
+    
     {
-        path: '/',
+        path: '/home',
         exact: true,
         component: Home,
         requiresAuth: false,
         menu: {
             title: '首页',
             icon: HomeOutlined,
+        }
+    },
+    {
+        path: '/article',
+        exact: true,
+        component: Article,
+        requiresAuth:false,
+        menu: {
+            title: '文章管理',
+            icon: HomeOutlined,
+        }
+    },
+    {
+        path: '/tags',
+        exact: true,
+        component: Tags,
+        requiresAuth:false,
+        menu: {
+            title: '标签管理',
+            icon: TagOutlined,
+        }
+    },
+    {
+        path: '/message',
+        exact: true,
+        component: Message,
+        requiresAuth:false,
+        menu: {
+            title: '互动聊天',
+            icon: MessageOutlined,
+        }
+    },
+    {
+        path: '/music',
+        exact: true,
+        component: Music,
+        requiresAuth:false,
+        menu: {
+            title: '音乐管理',
+            icon: VideoCameraOutlined,
+        }
+    },
+    {
+        path: '/user',
+        exact: true,
+        component: User,
+        requiresAuth:false,
+        menu: {
+            title: '个人中心',
+            icon: UserOutlined,
         }
     },
     {
@@ -41,54 +99,27 @@ const Router: IRouter[] = [
         menu: false,
     },
     {
-        path: '/article',
+        path: '/403',
         exact: true,
-        component: Login,
-        requiresAuth:false,
-        menu: {
-            title: '文章管理',
-            icon: HomeOutlined,
-        }
+        component: Forbidden,
+        menu: false,
     },
     {
-        path: '/tags',
+        path: '/404',
         exact: true,
-        component: Home,
-        requiresAuth:false,
-        menu: {
-            title: '标签管理',
-            icon: TagOutlined,
-        }
+        component: NotFound,
+        menu: false,
     },
     {
-        path: '/message',
+        path: '/500',
         exact: true,
-        component: Home,
-        requiresAuth:false,
-        menu: {
-            title: '互动聊天',
-            icon: MessageOutlined,
-        }
+        component: ServerError,
+        menu: false,
     },
     {
-        path: '/music',
-        exact: true,
-        component: Home,
-        requiresAuth:false,
-        menu: {
-            title: '音乐管理',
-            icon: MessageOutlined,
-        }
-    },
-    {
-        path: '/user',
-        exact: true,
-        component: Home,
-        requiresAuth:false,
-        menu: {
-            title: '个人中心',
-            icon: UserOutlined,
-        }
+        path: '',
+        component: NotFound,
+        menu: false,
     }
 ];
 
