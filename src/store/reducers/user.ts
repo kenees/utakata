@@ -1,6 +1,6 @@
 import { SET_USER_INFO } from '../constants/user'
 
-interface IState {
+export interface IState {
   user_info: any,
   age: number,
 }
