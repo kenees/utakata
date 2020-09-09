@@ -223,7 +223,9 @@ export default class Article extends React.Component<IProps, IState> {
                 placeholder='请输入标题'
               />
             </Form.Item>
-            <Form.Item name="range-picker" label="时间"
+            <Form.Item 
+                name="range-picker" 
+                label="时间"
             >
               <RangePicker/>
             </Form.Item>
