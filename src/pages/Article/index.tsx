@@ -6,9 +6,11 @@ import {
   Space,
   Form,
   Input,
+  Modal,
   DatePicker,
   Popconfirm,
 } from 'antd';
+import AddArticle from './AddArticle'
 import {IProps, IState} from './interface';
 import styles from './index.module.scss';
 
@@ -43,8 +45,8 @@ export default class Article extends React.Component<IProps, IState> {
 
   constructor(props: IProps) {
     super(props);
-    console.log(props.user);
     this.state = {
+      visible: false,
       total: 50,
       current: 1,
       dataSource: [
@@ -182,6 +184,10 @@ export default class Article extends React.Component<IProps, IState> {
     };
   };
 
+  componentDidMount() {
+  
+  }
+
   onDelete = (id: string) => {
     console.log('delete', id)
   };
@@ -196,8 +202,23 @@ export default class Article extends React.Component<IProps, IState> {
     console.log(e);
   };
 
+  handleModal = (visible: boolean, e?: any) => {
+    console.log(visible)
+    this.setState({
+      visible,
+    })
+    if (e) {
+      //  新增
+      console.log(e);
+    }
+  }
+
+  onModalSubmit = (e) => {
+    console.log(e)
+  }
+
   render() {
-    const {dataSource, total, current} = this.state;
+    const {dataSource, total, current, visible} = this.state;
     return (
       <div className={styles.page}>
         <div className={styles.form}>
@@ -233,7 +254,7 @@ export default class Article extends React.Component<IProps, IState> {
               <Button type='primary' htmlType='submit'>查询</Button>
             </Form.Item>
             <Form.Item>
-              <Button type='primary'>新增</Button>
+              <Button type='primary' onClick={() => this.handleModal(true)}>新增</Button>
             </Form.Item>
           </Form>
         </div>
@@ -248,6 +269,12 @@ export default class Article extends React.Component<IProps, IState> {
             current,
             onChange: e => this.onChange(e)
           }}
+        />
+
+        <AddArticle
+          visible={visible}
+          onCancle={() => this.handleModal(false)}
+          onFinish={this.onModalSubmit}
         />
       </div>
     )

@@ -4,6 +4,7 @@ export interface IProps {
 }
 
 export interface IState {
+  visible: boolean,
   total: number,
   current: number,
   dataSource: Array<any>,
