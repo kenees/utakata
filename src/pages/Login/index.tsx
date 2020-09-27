@@ -5,7 +5,7 @@ import styles from'./index.module.scss';
 
 
 
-export default class Login extends React.Component<{}, {}> {
+export default class Login extends React.Component<any, {}> {
   render() {
     return <div className={styles.login_layout}>
       <div className={styles.header}>后台管理系统</div>

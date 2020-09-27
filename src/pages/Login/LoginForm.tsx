@@ -1,13 +1,24 @@
 import React from 'react';
-import { Form, Input, Button, Checkbox } from 'antd';
+import { Form, Input, Button, message } from 'antd';
+import api from '@/api';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import styles from './LoginForm.module.scss'
 
 const NormalLoginForm = (props: any) => {
-  const onFinish = values => {
+  const onFinish = (values:any) => {
     console.log('Received values of form: ', values);
-    console.log(props)
-    props.history.push('/home')
+    api.login(values)
+      .then((res:any) => {
+        console.log('Login Success', res);
+        if (res.success) {
+          props.history.push('/home')
+        } else {
+          message.warning(res.remark)
+        }
+      })
+      .catch((e: any) => {
+        message.error(e.describe)
+      })
   };
 
   return (
@@ -18,7 +29,7 @@ const NormalLoginForm = (props: any) => {
       onFinish={onFinish}
     >
       <Form.Item
-        name="username"
+        name="user_name"
         rules={[{ required: true, message: 'Please input your Username!' }]}
       >
         <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />

@@ -1,7 +1,7 @@
 module.exports = {
   '/api': {
-    target: 'http://192.168.1.2:8080',
-    pathRewrite: { '^/api': '/' },
+    target: 'http://127.0.0.1:5000',
+    pathRewrite: { '^/api': '/api' },
     changeOrigin: true
   },
   '/cloud': {

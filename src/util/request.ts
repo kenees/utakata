@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import { message } from 'antd'
 class Request {
   constructor() {
     enum codeMessage {
@@ -26,7 +26,8 @@ class Request {
           // const token = getCookie('名称');注意使用的时候需要引入cookie方法，推荐js-cookie
           config.data = JSON.stringify(config.data);
           config.headers = {
-              'Content-Type': 'application/x-www-form-urlencoded'
+              // 'Content-Type': 'application/x-www-form-urlencoded'
+            'Content-Type': 'application/json'
           };
           // if(token){
           //   config.params = {'token':token}
@@ -37,25 +38,21 @@ class Request {
     //http response 拦截器
     axios.interceptors.response.use(
       response => {
-          if (response.data.errCode === 2) {
-              // router.push({
-              //     path: "/login",
-              //     querry: { redirect: router.currentRoute.fullPath }//从哪个页面跳转
-              // })
-          }
-          return response;
+          console.log('response', response);
+          return response.data;
       },
       error => {
-          if (error.response.status === 404) {
-            window.location.href = '/#/404';
+          const { status, statusText, data } = error.response;
+          if (status === 401) {
+            // 未登录
+            message.warning('未登录');
+            window.location.replace('/#/login')
           }
-          if (error.response.status === 401) {
-            // window.location.href = '/#/login';
-          }
+
           return Promise.reject({
-            status: error.response.status,
-            statusText: error.response.statusText,
-            describe: codeMessage[error.response.status] || '服务异常',
+            status,
+            statusText,
+            describe: data?.remark || codeMessage[status] || '服务异常',
           })
       }
     )

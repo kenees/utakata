@@ -12,6 +12,7 @@ import styles from './index.module.scss';
 
 const {Header, Sider, Content} = Layout;
 const {Search} = Input;
+const { Item } = Menu;
 
 export default class MyLayout extends React.Component {
   state = {
@@ -22,6 +23,17 @@ export default class MyLayout extends React.Component {
     this.setState({
       collapsed: !this.state.collapsed,
     });
+  };
+
+  onMenuClick = (e: any) => {
+    if (e.key === 'loginOut') {
+      this.loginOut()
+    }
+  };
+
+  loginOut = () => {
+    console.log(this.props);
+    window.location.replace('/#/login')
   };
 
 
@@ -48,11 +60,11 @@ export default class MyLayout extends React.Component {
                 style={{width: 200}}
               />
               <Dropdown overlay={
-                <Menu>
-                  <Menu.Item>
+                <Menu onClick={this.onMenuClick}>
+                  <Item key='loginOut'>
                     <ExportOutlined/>
                     退出
-                  </Menu.Item>
+                  </Item>
                 </Menu>
               }>
                 <div className={styles.user} >
