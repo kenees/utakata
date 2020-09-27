@@ -5,6 +5,6 @@ interface ILogin {
   password: any
 }
 
-export async function login (data: ILogin) {
+export async function Login (data: ILogin) {
   return request.post('/api/v1/user/login', data)
 }

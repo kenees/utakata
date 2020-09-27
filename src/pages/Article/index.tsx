@@ -273,7 +273,7 @@ export default class Article extends React.Component<IProps, IState> {
 
         <AddArticle
           visible={visible}
-          onCancle={() => this.handleModal(false)}
+          onCancel={() => this.handleModal(false)}
           onFinish={this.onModalSubmit}
         />
       </div>

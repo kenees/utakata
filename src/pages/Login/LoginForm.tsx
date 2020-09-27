@@ -1,22 +1,27 @@
 import React from 'react';
-import { Form, Input, Button, message } from 'antd';
+import {connect} from 'react-redux';
+import {Form, Input, Button, message} from 'antd';
 import api from '@/api';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { setUserInfo } from '@/store/actions'
+import {UserOutlined, LockOutlined} from '@ant-design/icons';
 import styles from './LoginForm.module.scss'
 
+
 const NormalLoginForm = (props: any) => {
-  const onFinish = (values:any) => {
+  const onFinish = (values: any) => {
     console.log('Received values of form: ', values);
-    api.login(values)
-      .then((res:any) => {
+    console.log(props)
+    api.Login(values)
+      .then((res: any) => {
         console.log('Login Success', res);
         if (res.success) {
+          props.dispatch(setUserInfo(res.data.user_info))
           props.history.push('/home')
         } else {
           message.warning(res.remark)
         }
       })
-      .catch((e: any) => {
+      .catch(e => {
         message.error(e.describe)
       })
   };
@@ -25,21 +30,21 @@ const NormalLoginForm = (props: any) => {
     <Form
       name="normal_login"
       className={styles['login-form']}
-      initialValues={{ remember: true }}
+      initialValues={{remember: true}}
       onFinish={onFinish}
     >
       <Form.Item
         name="user_name"
-        rules={[{ required: true, message: 'Please input your Username!' }]}
+        rules={[{required: true, message: 'Please input your Username!'}]}
       >
-        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
+        <Input prefix={<UserOutlined className="site-form-item-icon"/>} placeholder="Username"/>
       </Form.Item>
       <Form.Item
         name="password"
-        rules={[{ required: true, message: 'Please input your Password!' }]}
+        rules={[{required: true, message: 'Please input your Password!'}]}
       >
         <Input
-          prefix={<LockOutlined className="site-form-item-icon" />}
+          prefix={<LockOutlined className="site-form-item-icon"/>}
           type="password"
           placeholder="Password"
         />
@@ -54,4 +59,4 @@ const NormalLoginForm = (props: any) => {
   );
 };
 
-export default NormalLoginForm;
+export default connect(({ user }: any) => ({ user}))(NormalLoginForm);
