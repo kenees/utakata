@@ -34,7 +34,7 @@ export default class MyMenu extends React.Component<IProps, IState> {
     })
     history.listen((history:any) =>{
       this.setState({
-        selectedKeys: [history.location.hash.substr(1)]
+        selectedKeys: [history?.hash.substr(1)]
       })
     })
   }
