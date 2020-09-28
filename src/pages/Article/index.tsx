@@ -7,12 +7,14 @@ import {
   Form,
   Input,
   Modal,
+  message,
   DatePicker,
   Popconfirm,
 } from 'antd';
 import AddArticle from './AddArticle'
 import {IProps, IState} from './interface';
 import styles from './index.module.scss';
+import {getArticleList} from "@/api/article";
 
 const {RangePicker} = DatePicker;
 
@@ -47,7 +49,7 @@ export default class Article extends React.Component<IProps, IState> {
     super(props);
     this.state = {
       visible: false,
-      total: 50,
+      total: 0,
       current: 1,
       dataSource: [
         {
@@ -185,8 +187,24 @@ export default class Article extends React.Component<IProps, IState> {
   };
 
   componentDidMount() {
-  
+    this.getList()
   }
+
+  getList = () => {
+    getArticleList()
+      .then((res: any) => {
+        if (res.success) {
+          this.setState({
+            total: res.data.total,
+            dataSource: res.data.article_list,
+          })
+        }
+
+      })
+      .catch(e => {
+        message.error(e.describe)
+      })
+  };
 
   onDelete = (id: string) => {
     console.log('delete', id)
@@ -203,19 +221,18 @@ export default class Article extends React.Component<IProps, IState> {
   };
 
   handleModal = (visible: boolean, e?: any) => {
-    console.log(visible)
     this.setState({
       visible,
-    })
+    });
     if (e) {
       //  新增
       console.log(e);
     }
-  }
+  };
 
   onModalSubmit = (e) => {
     console.log(e)
-  }
+  };
 
   render() {
     const {dataSource, total, current, visible} = this.state;
