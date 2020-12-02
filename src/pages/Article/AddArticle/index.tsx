@@ -4,15 +4,18 @@ import {
   Modal,
   Input,
 } from 'antd';
-const AddArticle = (props) => {
-  const [form] = Form.useForm()
+import { Editor } from '@/components';
+
+
+const AddArticle = (props: any) => {
+  const [form] = Form.useForm();
   const [visible, setVisible] = useState(props.visible || false);
 
   useEffect(() => {
     setVisible(props.visible)
-  }, [props.visible])
+  }, [props.visible]);
 
-  const onFinish = values => {
+  const onFinish = (values: any) => {
     form.validateFields()
     .then(res => {
       console.log(res)
@@ -30,11 +33,16 @@ const AddArticle = (props) => {
 
   const onCancel = () => {
     props.onCancel()
+  };
+
+  const handleChange = (e: any) => {
+    console.log('edit quill', e)
   }
 
   return (
     <Modal
       title='新增文章'
+      width='950px'
       visible={visible}
       onOk={onFinish}
       onCancel={onCancel}
@@ -47,11 +55,20 @@ const AddArticle = (props) => {
             label='标题'
             name='title'
             rules={[
-              { required: true }
+              { required: true },
+              { max: 16 },
             ]}
           >
             <Input placeholder='请输入标题' />
           </Form.Item>
+        <Form.Item
+          label='内容'
+          name='content'
+        >
+          <Editor 
+            onChange={handleChange}
+          />
+        </Form.Item>
       </Form>
     </Modal>
   )

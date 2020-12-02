@@ -69,4 +69,6 @@ declare module 'react-redux';
 
 declare module 'classnames';
 
-declare module '@ant-design/icons'
+declare module '@ant-design/icons';
+
+declare module 'wangeditor';
