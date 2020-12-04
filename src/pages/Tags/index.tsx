@@ -9,11 +9,11 @@ import {
   message,
   Popconfirm,
 } from 'antd';
-import AddTag from './AddTag';
+import Tag from './Tag';
 import api from '@/api';
-import {IProps, IState, EditModel} from './interface';
+import {IProps, IState} from './interface';
+import {EditModel} from '@/const';
 import styles from './index.module.scss';
-
 
 
 @connect(({user}: any) => ({user}))
@@ -22,6 +22,7 @@ export default class Tags extends React.Component<IProps, IState> {
     {title: '编号', dataIndex: 'tag_id', key: 'tag_id'},
     {title: '标签名', dataIndex: 'tag_name', key: 'tag_name'},
     {title: '颜色', dataIndex: 'default_color', key: 'default_color'},
+    {title: '是否有效', dataIndex: 'is_valid', key: 'is_valid', render: (text: any) => text ? '是':'否' },
     {
       title: '创建时间', dataIndex: 'create_at', key: 'create_at', render: (text: any) => {
         return new Date(text * 1000).format('yyyy-MM-dd hh:mm:ss')
@@ -43,7 +44,7 @@ export default class Tags extends React.Component<IProps, IState> {
             title='Are you sure?'
             okText='Yes'
             cancelText='No'
-            onConfirm={() => this.onDelete(record.article_id)}
+            onConfirm={() => this.onDelete(record.tag_id)}
           >
             <a>Delete</a>
           </Popconfirm>
@@ -53,23 +54,22 @@ export default class Tags extends React.Component<IProps, IState> {
 
   constructor(props: IProps) {
     super(props);
-    console.log(props.user);
     this.state = {
       total: 0,
       current: 1,
       visible: false,
       model: EditModel.ADD,
-      info: {},
-      dataSource: []
-    };
+      info: null,
+      dataSource: [],
+    };    
   };
 
   componentWillMount() {
     this.getTagList();
   }
 
-  getTagList = () => {
-    api.GetTags()
+  getTagList = (params: any ={}) => {
+    api.GetTags(params)
       .then((res: any) => {
         if (res.success) {
           this.setState({
@@ -85,8 +85,28 @@ export default class Tags extends React.Component<IProps, IState> {
       })
   };
 
-  onDelete = (id: string) => {
+  onCreate= () => {
+    this.handleModal(true);
+    this.handleChangeModel(EditModel.ADD, {});
+  };
+
+  onDelete = (id: number) => {
     console.log('delete', id)
+    if (!id) {
+      message.warning('id不能为空');
+      return
+    }
+    api.DeleteTag(id)
+    .then((res: any) => {
+      if (res.success) {
+        this.getTagList();
+      } else {
+        message.warning(res.remark);
+      }
+    })
+    .catch(e => {
+      message.error(e.describe)
+    })
   };
 
   onChange = (e: number) => {
@@ -97,6 +117,7 @@ export default class Tags extends React.Component<IProps, IState> {
 
   handleSubmit = (e: any) => {
     console.log(e);
+    this.getTagList(e);
   };
 
   handleModal = (visible: boolean) => {
@@ -114,7 +135,10 @@ export default class Tags extends React.Component<IProps, IState> {
 
   onModalSubmit = (e: any) => {
     console.log('create tag', e);
-    api.CreateTag(e)
+    const { model } = this.state;
+
+    if (model === EditModel.ADD) {
+      api.CreateTag(e)
       .then((res: any) => {
         if (res.success) {
           message.info('创建成功');
@@ -127,14 +151,32 @@ export default class Tags extends React.Component<IProps, IState> {
       .catch(e => {
         message.error(e);
       })
+    } else {
+      api.UpdateTag(e)
+      .then((res: any) => {
+        if (res.success) {
+          message.info('更新成功');
+          this.handleModal(false);
+          this.getTagList();
+        } else {
+          message.warn(res.remark);
+        }
+      })
+      .catch(e => {
+        message.error(e);
+      })
+    }
   };
+
 
   render() {
     const {dataSource, total, current, visible, model, info} = this.state;
+
     return (
       <div className={styles.page}>
         <div className={styles.form}>
           <Form
+            // form={form}
             layout='inline'
             onFinish={this.handleSubmit}
           >
@@ -143,13 +185,13 @@ export default class Tags extends React.Component<IProps, IState> {
               name='tag_id'
             >
               <Input
-                type='text'
+                type='number'
                 placeholder='请输入编号'
               />
             </Form.Item>
             <Form.Item
               label='标签名'
-              name='title'
+              name='tag_name'
             >
               <Input
                 type='text'
@@ -160,7 +202,7 @@ export default class Tags extends React.Component<IProps, IState> {
               <Button type='primary' htmlType='submit'>查询</Button>
             </Form.Item>
             <Form.Item>
-              <Button type='primary' onClick={() => this.handleModal(true)}>新增</Button>
+              <Button type='primary' onClick={this.onCreate}>新增</Button>
             </Form.Item>
           </Form>
         </div>
@@ -177,7 +219,7 @@ export default class Tags extends React.Component<IProps, IState> {
           }}
         />
 
-        <AddTag
+        <Tag
           model={model}
           info={info}
           visible={visible}

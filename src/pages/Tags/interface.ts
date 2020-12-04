@@ -1,6 +1,15 @@
+import {EditModel} from '@/const';
+
 export interface IProps {
     user: any,
     dispatch: any,
+}
+
+export interface IInfo {
+  tag_id: number | null,
+  tag_name: string,
+  default_color: string,
+  is_valid: boolean,
 }
 
 export interface IState {
@@ -8,11 +17,8 @@ export interface IState {
   current: number,
   visible: boolean,
   model: EditModel.EDIT | EditModel.ADD,
-  info: any,
+  info: IInfo | null,
   dataSource: Array<any>,
 }
 
-export enum EditModel {
-  EDIT = 'EDIT',
-  ADD  = 'ADD'
-}
+

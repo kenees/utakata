@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React  from 'react';
 import E from 'wangeditor';
 
 interface IProps {
+  initValue: string,
   onChange: (val: any) => void,
 }
 
@@ -15,12 +16,16 @@ export default class Editor extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = {
-      editorContent:''
+      editorContent: ''
     };
   }
 
+  componentWillMount() {
+
+  }
+
   componentDidMount() {
-    const { onChange } = this.props;
+    const { onChange, initValue } = this.props;
     const elemMenu = this.refs.editorElemMenu;
     const elemBody = this.refs.editorElemBody;
     const editor = new E(elemMenu,elemBody)
@@ -58,6 +63,7 @@ export default class Editor extends React.Component<IProps, IState> {
     editor.customConfig.uploadImgShowBase64 = true
     editor.create()
 
+    editor.txt.html(initValue)
   };
 
   render() {
@@ -78,7 +84,6 @@ export default class Editor extends React.Component<IProps, IState> {
               borderTop:"none"
             }}
             ref="editorElemBody" className="editorElem-body">
-
           </div>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {
+  Tag,
   Button,
   Table,
   Space,
@@ -11,28 +12,59 @@ import {
   DatePicker,
   Popconfirm,
 } from 'antd';
-import AddArticle from './AddArticle'
+import ConfirmArticle from './ConfirmArticle'
 import {IProps, IState} from './interface';
+import { setTagInfo } from '@/store/actions';
 import styles from './index.module.scss';
-import {getArticleList} from "@/api/article";
+import api from '@/api';
+import {EditModel} from '@/const';
 
 const {RangePicker} = DatePicker;
 
-@connect(({user}: any) => ({user}))
+@connect(({user, tag}: any) => ({user, tag}))
 export default class Article extends React.Component<IProps, IState> {
+
   columns = [
-    {title: '序号', dataIndex: 'id', key: 'id'},
+    {title: '序号', dataIndex: 'article_id', key: 'article_id'},
     {title: '编号', dataIndex: 'article_id', key: 'article_id'},
-    {title: '标题', dataIndex: 'title', key: 'title'},
-    {title: '标签', dataIndex: 'tags', key: 'tags'},
-    {title: '创建时间', dataIndex: 'create_time', key: 'create_time'},
-    {title: '更新时间', dataIndex: 'update_time', key: 'update_time'},
+    {title: '标题', dataIndex: 'article_name', key: 'article_name'},
+    {title: '标签', dataIndex: 'article_tag', key: 'article_tag', render: (text: any) => {
+     return <>
+        {
+          text && text.split(',').map((item: any, idx:number) =>{
+           const tag_item = this.props.tag.tag_list.filter((t: any) => t.tag_id === Number(item))[0];
+           if (!tag_item) return;
+           return <Tag color={tag_item.default_color} key={idx}>{tag_item.tag_name}</Tag>
+          })
+        }
+      </>
+    }},
+    {
+      title: '创建时间', dataIndex: 'create_at', key: 'create_at', render: (text: any) => {
+        return new Date(text * 1000).format('yyyy-MM-dd hh:mm:ss')
+      }
+    },
+    {
+      title: '更新时间', dataIndex: 'update_at', key: 'update_at', render: (text: any) => {
+        return new Date(text * 1000).format('yyyy-MM-dd hh:mm:ss')
+      }
+    },
     {title: '阅读数', dataIndex: 'reading_number', key: 'reading_number'},
     {
       title: '操作', key: 'action', render: (text: any, record: any) => (
         <Space size='middle'>
-          <a>Edit</a>
-          <a>{record.record ? 'Show' : 'Hide'}</a>
+          <a onClick={() => {
+            this.handleModal(true);
+            this.handleChangeModel(EditModel.EDIT, record)
+          }}>Edit</a>
+          <Popconfirm
+            title={`Are you sure ${!record.is_valid ? 'Show' : 'Hide'}?`}
+            okText='Yes'
+            cancelText='No'
+            onConfirm={() => this.onArticleUpdate({article_id: record.article_id, is_valid: !record.is_valid})}
+          >
+            <a>{!record.is_valid ? 'Show' : 'Hide'}</a>
+          </Popconfirm>
           <Popconfirm
             title='Are you sure?'
             okText='Yes'
@@ -51,147 +83,32 @@ export default class Article extends React.Component<IProps, IState> {
       visible: false,
       total: 0,
       current: 1,
-      dataSource: [
-        {
-          id: 1,
-          article_id: 10001,
-          title: '基操',
-          tags: [1, 2, 3],
-          create_time: 1599378639119,
-          update_time: 1599378639119,
-          reading_number: 23,
-          visible: true,
-        },
-        {
-          id: 1,
-          article_id: 10001,
-          title: '基操',
-          tags: [1, 2, 3],
-          create_time: 1599378639119,
-          update_time: 1599378639119,
-          reading_number: 23,
-          visible: true,
-        },
-        {
-          id: 1,
-          article_id: 10001,
-          title: '基操',
-          tags: [1, 2, 3],
-          create_time: 1599378639119,
-          update_time: 1599378639119,
-          reading_number: 23,
-          visible: true,
-        },
-        {
-          id: 1,
-          article_id: 10001,
-          title: '基操',
-          tags: [1, 2, 3],
-          create_time: 1599378639119,
-          update_time: 1599378639119,
-          reading_number: 23,
-          visible: true,
-        },
-        {
-          id: 1,
-          article_id: 10001,
-          title: '基操',
-          tags: [1, 2, 3],
-          create_time: 1599378639119,
-          update_time: 1599378639119,
-          reading_number: 23,
-          visible: true,
-        },
-        {
-          id: 1,
-          article_id: 10001,
-          title: '基操',
-          tags: [1, 2, 3],
-          create_time: 1599378639119,
-          update_time: 1599378639119,
-          reading_number: 23,
-          visible: true,
-        },
-        {
-          id: 1,
-          article_id: 10001,
-          title: '基操',
-          tags: [1, 2, 3],
-          create_time: 1599378639119,
-          update_time: 1599378639119,
-          reading_number: 23,
-          visible: true,
-        },
-        {
-          id: 1,
-          article_id: 10001,
-          title: '基操',
-          tags: [1, 2, 3],
-          create_time: 1599378639119,
-          update_time: 1599378639119,
-          reading_number: 23,
-          visible: true,
-        },
-        {
-          id: 1,
-          article_id: 10001,
-          title: '基操',
-          tags: [1, 2, 3],
-          create_time: 1599378639119,
-          update_time: 1599378639119,
-          reading_number: 23,
-          visible: true,
-        },
-        {
-          id: 1,
-          article_id: 10001,
-          title: '基操',
-          tags: [1, 2, 3],
-          create_time: 1599378639119,
-          update_time: 1599378639119,
-          reading_number: 23,
-          visible: true,
-        },
-        {
-          id: 2,
-          article_id: 10001,
-          title: '基操',
-          tags: [1, 2],
-          create_time: 1599378639119,
-          update_time: 1599378639119,
-          reading_number: 13,
-          visible: true,
-        },
-        {
-          id: 3,
-          article_id: 10001,
-          title: '基操',
-          tags: [1, 2, 3],
-          create_time: 1599378639119,
-          update_time: 1599378639119,
-          reading_number: 1,
-          visible: true,
-        },
-        {
-          id: 4,
-          article_id: 10001,
-          title: '基操',
-          tags: [1, 2, 3],
-          create_time: 1599378639119,
-          update_time: 1599378639119,
-          reading_number: 23,
-          visible: true,
-        }
-      ]
+      model: EditModel.ADD,
+      info: null,
+      dataSource: []
     };
   };
 
   componentDidMount() {
-    this.getList()
+    this.getTagList();
+    this.getList();
   }
 
-  getList = () => {
-    getArticleList()
+  getTagList = () => {
+    api.GetTags()
+      .then((res:any) => {
+        if (res.success) {
+          const { dispatch } = this.props;
+          dispatch(setTagInfo(res.data.tag_list || []));
+        }
+      })
+      .catch((e: any) => {
+        message.error(e.describe || '获取标签失败');
+      })
+  };
+
+  getList = (params: any = {}) => {
+    api.GetArticleList(params)
       .then((res: any) => {
         if (res.success) {
           this.setState({
@@ -206,8 +123,42 @@ export default class Article extends React.Component<IProps, IState> {
       })
   };
 
-  onDelete = (id: string) => {
-    console.log('delete', id)
+  onCreate= () => {
+    this.handleModal(true);
+    this.handleChangeModel(EditModel.ADD, {});
+  };
+
+  onArticleUpdate = (params: any = {}) => {
+     api.UpdateArticle (params)
+       .then((res:any) => {
+         if (res.success) {
+           message.success('更新成功');
+           this.getList();
+         } else {
+           message.warn('更新失败');
+         }
+       })
+       .catch((e: any) => {
+         message.error(e.describe);
+       })
+  };
+
+  onDelete = (id: number) => {
+    console.log('delete', id);
+    if (!id){
+      message.warn('参数异常');
+      return
+    }
+    api.DeleteArticle(id)
+      .then((res: any) => {
+        if (res.success) {
+          message.success('删除成功');
+          this.getList()
+        }
+      })
+      .catch((e: any) => {
+        message.error(e.describe);
+      })
   };
 
   onChange = (e: number) => {
@@ -217,7 +168,16 @@ export default class Article extends React.Component<IProps, IState> {
   };
 
   handleSubmit = (e: any) => {
-    console.log(e);
+    const picker_time = e['range-picker'] || ['',''],
+          start_time = picker_time[0] || '',
+          end_time = picker_time[1] || '',
+          params = {
+              article_id: e.article_id,
+              article_name: e.title,
+              start_time: start_time ? (new Date(start_time).getTime()/1000).toFixed(0) : '',
+              end_time: end_time ? (new Date(end_time).getTime()/1000).toFixed(0) : '',
+          };
+    this.getList(params)
   };
 
   handleModal = (visible: boolean, e?: any) => {
@@ -230,12 +190,57 @@ export default class Article extends React.Component<IProps, IState> {
     }
   };
 
-  onModalSubmit = (e) => {
-    console.log(e)
+  handleChangeModel = (model: any = EditModel.ADD, info: any = {}) => {
+    this.setState({
+      model,
+      info,
+    })
+  };
+
+  onModalSubmit = (e: any) => {
+    const { user: { user_info } } = this.props;
+    const { model } = this.state;
+    if (model === EditModel.ADD) {
+      api.CreateArticle({
+        ...e,
+        article_tag: e.article_tag.toString(),
+        edit_user: user_info.user_name || 'kenevy',
+      })
+        .then((res: any) => {
+          if (res.success) {
+            message.success('创建成功');
+            this.handleModal(false);
+            this.getList();
+          } else {
+            message.error(e.describe);
+          }
+        })
+        .catch((e:any) => {
+          message.error(e.describe);
+        })
+    } else {
+      api.UpdateArticle({
+        ...e,
+        article_tag: e.article_tag.toString(),
+        edit_user: e.user_name || 'kenevy',
+      })
+        .then((res: any) => {
+          if (res.success) {
+            message.success('更新成功');
+            this.handleModal(false);
+            this.getList();
+          } else {
+            message.error(e.describe);
+          }
+        })
+        .catch((e:any) => {
+          message.error(e.describe);
+        })
+    }
   };
 
   render() {
-    const {dataSource, total, current, visible} = this.state;
+    const {dataSource, total, current, visible, model, info} = this.state;
     return (
       <div className={styles.page}>
         <div className={styles.form}>
@@ -271,7 +276,7 @@ export default class Article extends React.Component<IProps, IState> {
               <Button type='primary' htmlType='submit'>查询</Button>
             </Form.Item>
             <Form.Item>
-              <Button type='primary' onClick={() => this.handleModal(true)}>新增</Button>
+              <Button type='primary' onClick={this.onCreate}>新增</Button>
             </Form.Item>
           </Form>
         </div>
@@ -288,8 +293,10 @@ export default class Article extends React.Component<IProps, IState> {
           }}
         />
 
-        <AddArticle
+        <ConfirmArticle
           visible={visible}
+          model={model}
+          info={info}
           onCancel={() => this.handleModal(false)}
           onFinish={this.onModalSubmit}
         />

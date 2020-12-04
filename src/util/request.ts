@@ -59,7 +59,8 @@ class Request {
   }
 
   get(url: string, params = {}) {
-    return axios.get(url, params);
+    console.log('params', params)
+    return axios.get(url, { params });
   }
 
   post(url: string, data = {}) {
@@ -70,8 +71,8 @@ class Request {
     return axios.put(url, data);
   }
 
-  delete(url: string) {
-    return axios.delete(url);
+  delete(url: string, params= {}) {
+    return axios.delete(url, { params });
   }
 }
 
