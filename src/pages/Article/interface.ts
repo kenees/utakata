@@ -8,7 +8,8 @@ export interface IProps {
 
 export interface IInfo {
   article_id: number,
-  article_name: string,
+  article_title: string,
+  article_describe: string,
   article_content: string,
   article_tag: string,
   is_valid: boolean,

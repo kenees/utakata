@@ -10,13 +10,15 @@ import api from '@/api';
 import { Editor } from '@/components';
 
 const { Option } = Select;
+const { TextArea } = Input;
 
 import {EditModel} from '@/const';
 import {IInfo} from '../interface'
 
 const defaultInfo:IInfo = {
   article_id: 0,
-  article_name: '',
+  article_title: '',
+  article_describe: '',
   article_content: '',
   article_tag: '',
   is_valid: true,
@@ -94,66 +96,77 @@ const AddArticle = (props: IProps) => {
     console.log('tag change...', e)
   };
 
-  return (
-    <Modal
-      title={ModelTitle[props.model]}
-      width='950px'
-      visible={visible}
-      onOk={onFinish}
-      onCancel={onCancel}
+  return <Modal
+    title={ModelTitle[props.model]}
+    width='950px'
+    visible={visible}
+    onOk={onFinish}
+    onCancel={onCancel}
+  >
+    <Form
+      layout='inline'
+      form={form}
+      initialValues={initvalValues}
     >
-      <Form
-          layout='inline'
-          form={form}
-          initialValues={initvalValues}
+      <Form.Item name='article_id' hidden/>
+      <Form.Item
+        label='标题'
+        name='article_title'
+        style={{margin: '0'}}
+        rules={[
+          {required: true},
+          {max: 16},
+        ]}
+      >
+        <Input placeholder='请输入标题'/>
+      </Form.Item>
+      <Form.Item
+        label='描述'
+        name='article_describe'
+        style={{marginTop:  '30px', width: '80%'}}
+        rules={[
+          {required: true},
+        ]}
+      >
+          {/* @ts-ignore */}
+          <TextArea showCount={true} maxLength={100} placeholder='请输入描述信息' />
+      </Form.Item>
+      <Form.Item
+        label='内容'
+        name='article_content'
+        style={{margin: '30px 0 0 0'}}
+        rules={[
+          {required: true},
+        ]}
+      >
+        <Editor
+          initValue={initvalValues.article_content}
+          onChange={handleChange}
+        />
+      </Form.Item>
+      <Form.Item
+        label='标签'
+        name='article_tag'
+        style={{margin: '30px 0'}}
+        rules={[
+          {required: true},
+        ]}
+      >
+        <Select
+          mode="multiple"
+          allowClear
+          style={{width: '300px'}}
+          placeholder="Please select"
+          onChange={handleSelectChange}
         >
-          <Form.Item name='article_id' hidden />
-          <Form.Item
-            label='标题'
-            name='article_name'
-            rules={[
-              { required: true },
-              { max: 16 },
-            ]}
-          >
-            <Input placeholder='请输入标题' />
-          </Form.Item>
-        <Form.Item
-          label='内容'
-          name='article_content'
-          style={{ margin: '30px 0 0 0' }}
-          rules={[
-            { required: true },
-          ]}
-        >
-          <Editor
-            initValue={initvalValues.article_content}
-            onChange={handleChange}
-          />
-        </Form.Item>
-        <Form.Item
-          label='标签'
-          name='article_tag'
-          style={{ margin: '30px 0' }}
-          rules={[
-            { required: true },
-          ]}
-        >
-          <Select
-            mode="multiple"
-            allowClear
-            style={{ width: '300px' }}
-            placeholder="Please select"
-            onChange={handleSelectChange}
-          >
-            {
-              tags.map((item: any) => <Option key={item.tag_id}>{item.tag_name}</Option>)
-            }
-          </Select>
-        </Form.Item>
-      </Form>
-    </Modal>
-  )
+          {
+            /*@ts-ignore */
+            tags.map((item: any) => <Option key={item.tag_id}>{item.tag_name}</Option>)
+          }
+        </Select>
+      </Form.Item>
+    </Form>
+  </Modal>
 };
 
 export default AddArticle;

@@ -27,7 +27,11 @@ export default class Article extends React.Component<IProps, IState> {
   columns = [
     {title: '序号', dataIndex: 'article_id', key: 'article_id'},
     {title: '编号', dataIndex: 'article_id', key: 'article_id'},
-    {title: '标题', dataIndex: 'article_name', key: 'article_name'},
+    {title: '标题', dataIndex: 'article_title', key: 'article_title'},
+    {title: '描述', dataIndex: 'article_describe', key: 'article_describe', render: (text: any = '') => <p>
+        { text ? text.substr(0, 20) : '' }
+      </p>
+    },
     {title: '标签', dataIndex: 'article_tag', key: 'article_tag', render: (text: any) => {
      return <>
         {
@@ -173,7 +177,7 @@ export default class Article extends React.Component<IProps, IState> {
           end_time = picker_time[1] || '',
           params = {
               article_id: e.article_id,
-              article_name: e.title,
+              article_title: e.title,
               start_time: start_time ? (new Date(start_time).getTime()/1000).toFixed(0) : '',
               end_time: end_time ? (new Date(end_time).getTime()/1000).toFixed(0) : '',
           };
