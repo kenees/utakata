@@ -6,16 +6,18 @@ import {
   message,
   Select,
 } from 'antd';
+import MDEditor from '@uiw/react-md-editor';
 import api from '@/api';
-import { Editor } from '@/components';
+
+// import { Editor } from '@/components';
 
 const { Option } = Select;
 const { TextArea } = Input;
 
-import {EditModel} from '@/const';
-import {IInfo} from '../interface'
+import { EditModel } from '@/const';
+import { IInfo } from '../interface'
 
-const defaultInfo:IInfo = {
+const defaultInfo: IInfo = {
   article_id: 0,
   article_title: '',
   article_describe: '',
@@ -24,7 +26,7 @@ const defaultInfo:IInfo = {
   is_valid: true,
   create_at: 0,
   update_at: 0,
-  reading_number:0,
+  reading_number: 0,
   edit_user: '',
   comment_number: '',
 };
@@ -50,14 +52,14 @@ const AddArticle = (props: IProps) => {
 
   useEffect(() => {
     api.GetTags()
-    .then((res:any) => {
-      if (res.success) {
-        setTags(res.data.tag_list)
-      }
-    })
-    .catch((e: any) => {
-      message.error(e.describe || '获取标签失败');
-    })
+      .then((res: any) => {
+        if (res.success) {
+          setTags(res.data.tag_list)
+        }
+      })
+      .catch((e: any) => {
+        message.error(e.describe || '获取标签失败');
+      })
   }, []);
 
   useEffect(() => {
@@ -75,13 +77,13 @@ const AddArticle = (props: IProps) => {
 
   const onFinish = (values: any) => {
     form.validateFields()
-    .then(res => {
-      console.log(res);
-      props.onFinish(res)
-    })
-    .catch(err => {
-      console.log(err);
-    })
+      .then(res => {
+        console.log(res);
+        props.onFinish(res)
+      })
+      .catch(err => {
+        console.log(err);
+      })
   };
 
   const onCancel = () => {
@@ -108,54 +110,60 @@ const AddArticle = (props: IProps) => {
       form={form}
       initialValues={initvalValues}
     >
-      <Form.Item name='article_id' hidden/>
+      <Form.Item name='article_id' hidden />
       <Form.Item
         label='标题'
         name='article_title'
-        style={{margin: '0'}}
+        style={{ margin: '0' }}
         rules={[
-          {required: true},
-          {max: 16},
+          { required: true },
+          { max: 16 },
         ]}
       >
-        <Input placeholder='请输入标题'/>
+        <Input placeholder='请输入标题' />
       </Form.Item>
       <Form.Item
         label='描述'
         name='article_describe'
-        style={{marginTop:  '30px', width: '80%'}}
+        style={{ marginTop: '30px', width: '80%' }}
         rules={[
-          {required: true},
+          { required: true },
         ]}
       >
-          {/* @ts-ignore */}
-          <TextArea showCount={true} maxLength={100} placeholder='请输入描述信息' />
+        {/* @ts-ignore */}
+        <TextArea showCount={true} maxLength={100} placeholder='请输入描述信息' />
       </Form.Item>
       <Form.Item
         label='内容'
         name='article_content'
-        style={{margin: '30px 0 0 0'}}
+        style={{ margin: '30px 0 0 0',  width: '80%' }}
         rules={[
-          {required: true},
+          { required: true },
         ]}
       >
-        <Editor
+        {/* <Editor
           initValue={initvalValues.article_content}
           onChange={handleChange}
+        /> */}
+
+        <MDEditor 
+          value={initvalValues.article_content}
+          onChange={handleChange}
         />
+        
       </Form.Item>
       <Form.Item
         label='标签'
         name='article_tag'
-        style={{margin: '30px 0'}}
+        style={{ margin: '30px 0' }}
         rules={[
-          {required: true},
+          { required: true },
         ]}
       >
         <Select
           mode="multiple"
           allowClear
-          style={{width: '300px'}}
+          style={{ width: '300px' }}
           placeholder="Please select"
           onChange={handleSelectChange}
         >
