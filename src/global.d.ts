@@ -14,6 +14,8 @@ declare module "*.ts";
 declare var jQuery: (selector:string) => any;
 
 declare module "react-editor-md";
+declare module "js-cookie";
+
 
 interface Date {
   format(fmt:string):string;
