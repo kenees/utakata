@@ -2,6 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {Form, Input, Button, message} from 'antd';
 import api from '@/api';
+import { storage } from '@/util/util';
 import { setUserInfo } from '@/store/actions'
 import {UserOutlined, LockOutlined} from '@ant-design/icons';
 import styles from './LoginForm.module.scss'
@@ -15,6 +16,7 @@ const NormalLoginForm = (props: any) => {
       .then((res: any) => {
         console.log('Login Success', res);
         if (res.success) {
+          storage.set('token', res.data.token)
           props.dispatch(setUserInfo(res.data.user_info))
           props.history.push('/home')
         } else {

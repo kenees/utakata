@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { message } from 'antd';
-import getCookie from 'js-cookie';
+import { storage } from './util';
 class Request {
   constructor() {
     enum codeMessage {
@@ -24,15 +24,14 @@ class Request {
     //http request 拦截器
     axios.interceptors.request.use(
       config => {
-          const token = getCookie('Utakata-System-Token'); // 注意使用的时候需要引入cookie方法，推荐js-cookie
+          console.log(config)
+          const token = storage.get('token') || '';
           config.data = JSON.stringify(config.data);
           config.headers = {
               // 'Content-Type': 'application/x-www-form-urlencoded'
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'token': token,
           };
-          if(token){
-            config.params = {'token':token}
-          }
           return config;
       }
     );
@@ -40,6 +39,7 @@ class Request {
     axios.interceptors.response.use(
       response => {
           console.log('response', response);
+
           return response.data;
       },
       error => {
